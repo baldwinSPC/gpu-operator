@@ -48,6 +48,15 @@ remediation:
                   operator: Exists
 # -- Default NFD rule will detect amd gpu based on pci vendor ID
 installdefaultNFDRule: true
+# -- Extra PCI device IDs to label as AMD GPUs, appended to the default NFD rule.
+# Use this for an AMD device the default rule does not list yet, for example an
+# integrated GPU. Values are 4-digit hexadecimal PCI device IDs as reported by
+# `lspci -nn -d 1002:`, without the 1002 vendor prefix. The vendor is always
+# 1002. Has no effect unless installdefaultNFDRule is true.
+additionalGPUDeviceIDs: []
+# -- Extra PCI device IDs to label as AMD virtual GPUs, appended to the default
+# NFD rule. Same format as additionalGPUDeviceIDs.
+additionalVGPUDeviceIDs: []
 # -- CRD will be patched as pre-upgrade/pre-rollback hook when doing helm upgrade/rollback to current helm chart
 upgradeCRD: true
 crds:

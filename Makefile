@@ -293,7 +293,7 @@ mod: ## Run go mod tidy and go mod edit to set up the go mod packages.
 	@go mod tidy
 	@go mod vendor
 
-UNIT_TEST ?= ./internal ./internal/controllers ./internal/kmmmodule
+UNIT_TEST ?= ./internal ./internal/controllers ./internal/kmmmodule ./tests/charts
 
 .PHONY: unit-test
 unit-test: vet ## Run the unit tests.
