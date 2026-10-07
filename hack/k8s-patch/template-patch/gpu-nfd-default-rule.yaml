@@ -236,6 +236,13 @@ spec:
             matchExpressions:
               vendor: {op: In, value: ["1002"]}
               device: {op: In, value: ["7590"]} # RX 9060 XT
+      # AMD Ryzen AI Max (Strix Halo) integrated GPU, gfx1151. Class 0x0380,
+      # not VGA, so a rule matching on class 0x0300 would miss it.
+      - matchFeatures:
+          - feature: pci.device
+            matchExpressions:
+              vendor: {op: In, value: ["1002"]}
+              device: {op: In, value: ["1586"]} # Radeon 8060S (Strix Halo)
       {{- if .Values.additionalGPUDeviceIDs }}
       # Additional device IDs supplied through .Values.additionalGPUDeviceIDs
       {{- range .Values.additionalGPUDeviceIDs }}

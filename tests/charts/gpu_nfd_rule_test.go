@@ -133,15 +133,15 @@ func TestAdditionalDeviceIDsAreAppendedToTheCorrectRule(t *testing.T) {
 	}{
 		{
 			name:            "a single additional GPU device ID",
-			setArgs:         []string{"--set", "additionalGPUDeviceIDs={1586}"},
-			expectInGPU:     []string{"1586"},
-			expectNotInVGPU: []string{"1586"},
+			setArgs:         []string{"--set", "additionalGPUDeviceIDs={abcd}"},
+			expectInGPU:     []string{"abcd"},
+			expectNotInVGPU: []string{"abcd"},
 		},
 		{
 			name:            "several additional GPU device IDs",
-			setArgs:         []string{"--set", "additionalGPUDeviceIDs={1586,150e}"},
-			expectInGPU:     []string{"1586", "150e"},
-			expectNotInVGPU: []string{"1586", "150e"},
+			setArgs:         []string{"--set", "additionalGPUDeviceIDs={abcd,beef}"},
+			expectInGPU:     []string{"abcd", "beef"},
+			expectNotInVGPU: []string{"abcd", "beef"},
 		},
 		{
 			name:           "an additional virtual GPU device ID",
@@ -177,6 +177,17 @@ func TestAdditionalDeviceIDsAreAppendedToTheCorrectRule(t *testing.T) {
 			assert.Equal(t, []string{"74a1"}, byRule["amd-gpu-mi300x"])
 		})
 	}
+}
+
+// TestDefaultRuleLabelsStrixHalo verifies the Strix Halo integrated GPU
+// (1002:1586, read off an AMD Ryzen AI Developer Platform, gfx1151) is matched
+// by the amd-gpu rule with no values set, so such a node is labelled and the
+// operands reach it. It is a GPU, not a virtual function, so it must not be
+// matched by amd-vgpu.
+func TestDefaultRuleLabelsStrixHalo(t *testing.T) {
+	byRule := deviceIDsByRule(renderNFDRule(t, baseValues))
+	assert.Contains(t, byRule["amd-gpu"], "1586", "the Strix Halo iGPU must be matched by default")
+	assert.NotContains(t, byRule["amd-vgpu"], "1586", "the Strix Halo iGPU is not a virtual function")
 }
 
 // TestEmptyAdditionalDeviceIDsChangeNothing verifies the default values render
